@@ -1,0 +1,11 @@
+.input {
+  display: none;
+}
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+button.actionButtons {
+  border-radius: unset;
+}

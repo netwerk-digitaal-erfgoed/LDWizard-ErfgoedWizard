@@ -1,0 +1,48 @@
+button.actionButtons {
+  border-radius: unset;
+}
+div.baseIriField {
+  max-width: 500px;
+  > div {
+    border-radius: unset;
+  }
+}
+div.globalSettingsForm {
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+
+  .normalSettings {
+    margin-bottom: 1rem;
+  }
+}
+.tableWrapper {
+  margin: 1rem;
+
+  tbody > tr:last-child td {
+    border-bottom: unset;
+  }
+}
+th.tableHeader {
+  font-weight: bold;
+  &:hover {
+    background-color: #eee;
+  }
+  &.disabled {
+    cursor: default;
+    background-color: #ccc;
+  }
+}
+.hint {
+  pointer-events: none;
+}
+.keyColumnWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: baseline;
+  .keyColumnSelector {
+    min-width: 120px;
+  }
+  .keyColumnInfo {
+    margin-left: 1rem;
+  }
+}
