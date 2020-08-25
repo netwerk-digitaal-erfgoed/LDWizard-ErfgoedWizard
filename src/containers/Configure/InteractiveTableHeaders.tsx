@@ -157,10 +157,12 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
               }
             }}
             disableClearable
+            openOnFocus
             renderInput={(props) => (
               <HintWrapper hint="This IRI will define the relation between the key column and this column">
                 <TextField
                   {...props}
+                  autoFocus
                   label="property URI"
                   error={!!autocompleteError}
                   helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
