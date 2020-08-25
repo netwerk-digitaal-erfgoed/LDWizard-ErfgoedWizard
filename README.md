@@ -14,10 +14,6 @@
 
 - Run `yarn` (and `yarn build`?) to install dependencies.
 
-- If you want to autodeploy this package to docker, uncomment the
-  `publish` job in `./.gitlab-ci.yml`, and make sure you've create a
-  docker image on docker hub with the name `triply/ldwizard-nde`
-
 ## Local development
 
 ### Running locally
