@@ -129,55 +129,57 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
       </DialogTitle>
       <DialogContent>
         {selectedHeader !== undefined && (
-          <Autocomplete
-            freeSolo
-            options={autocompleteSuggestions}
-            value={propertyIri}
-            renderOption={(option: AutocompleteSuggestion) => (
-              <div>
-                <Typography>{getPrefixed(option.iri, prefixes) || option.iri}</Typography>
-                {option.description && (
-                  <Typography
-                    dangerouslySetInnerHTML={{ __html: option.description }}
-                    variant="caption"
-                    className={styles.hint}
-                  />
-                )}
-              </div>
-            )}
-            getOptionLabel={(value: any) =>
-              typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
-            }
-            onChange={(_event, newValue: string | AutocompleteSuggestion | null) => {
-              if (!newValue) return;
-              if (typeof newValue === "string") {
-                setPropertyIri(newValue);
-              } else {
-                setPropertyIri(newValue.iri);
+          <form onSubmit={confirmIri}>
+            <Autocomplete
+              freeSolo
+              options={autocompleteSuggestions}
+              value={propertyIri}
+              renderOption={(option: AutocompleteSuggestion) => (
+                <div>
+                  <Typography>{getPrefixed(option.iri, prefixes) || option.iri}</Typography>
+                  {option.description && (
+                    <Typography
+                      dangerouslySetInnerHTML={{ __html: option.description }}
+                      variant="caption"
+                      className={styles.hint}
+                    />
+                  )}
+                </div>
+              )}
+              getOptionLabel={(value: any) =>
+                typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
               }
-            }}
-            disableClearable
-            openOnFocus
-            renderInput={(props) => (
-              <HintWrapper hint="This IRI will define the relation between the key column and this column">
-                <TextField
-                  {...props}
-                  autoFocus
-                  label="property URI"
-                  error={!!autocompleteError}
-                  helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
-                  placeholder={
-                    transformationConfig.baseIri + transformationConfig.columnConfiguration[selectedHeader].columnName
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  type="url"
-                  inputMode="url"
-                  fullWidth
-                  onChange={(event) => setPropertyIri(event.currentTarget.value)}
-                />
-              </HintWrapper>
-            )}
-          />
+              onChange={(_event, newValue: string | AutocompleteSuggestion | null) => {
+                if (!newValue) return;
+                if (typeof newValue === "string") {
+                  setPropertyIri(newValue);
+                } else {
+                  setPropertyIri(newValue.iri);
+                }
+              }}
+              disableClearable
+              openOnFocus
+              renderInput={(props) => (
+                <HintWrapper hint="This IRI will define the relation between the key column and this column">
+                  <TextField
+                    {...props}
+                    autoFocus
+                    label="property URI"
+                    error={!!autocompleteError}
+                    helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
+                    placeholder={
+                      transformationConfig.baseIri + transformationConfig.columnConfiguration[selectedHeader].columnName
+                    }
+                    InputLabelProps={{ shrink: true }}
+                    type="url"
+                    inputMode="url"
+                    fullWidth
+                    onChange={(event) => setPropertyIri(event.currentTarget.value)}
+                  />
+                </HintWrapper>
+              )}
+            />
+          </form>
         )}
       </DialogContent>
       <DialogActions>
