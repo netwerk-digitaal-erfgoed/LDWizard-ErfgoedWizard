@@ -81,16 +81,20 @@ const TriplyDBUploadProcess: React.FC<Props> = ({ transformationResult }) => {
       const cowScript = await getCowTransformationScript(transformationConfig);
       const rmlScript = await getRmlTransformationScript(transformationConfig);
       // We need to check if we are overwriting or uploading new assets
+      // Removes extension from filename
+      const fileBase = typeof source !== "string" ? source.name.replace(/\.[^/.]+$/, "") : undefined;
       if (typeof rattScript === "string") {
-        const fileName = "convert.ts";
-        await uploadAsset(ds, stringToFile(rattScript, fileName, "text/x-typescript"));
+        await uploadAsset(
+          ds,
+          stringToFile(rattScript, `${fileBase ? fileBase + "." : ""}convert.ts`, "text/x-typescript")
+        );
       }
       if (typeof cowScript === "string") {
-        const fileName = typeof source === "string" ? `convert.json` : `${source?.name}-metadata.json`;
+        const fileName = typeof source === "string" ? `convert.csv-metadata.json` : `${source?.name}-metadata.json`;
         await uploadAsset(ds, stringToFile(cowScript, fileName, "application/json+ld"));
       }
       if (typeof rmlScript === "string") {
-        await uploadAsset(ds, stringToFile(rmlScript, "rules.rml.ttl", "text/turtle"));
+        await uploadAsset(ds, stringToFile(rmlScript, `${fileBase || "rules"}.rml.ttl`, "text/turtle"));
       }
       setProcessText("Uploading source");
       if (typeof source === "string") {

@@ -177,15 +177,20 @@ const Publish: React.FC<Props> = ({}) => {
                       getOptionsLabel={(option) => (option === "cow" ? "CoW" : option.toUpperCase())}
                       onActionSelected={(result) =>
                         getDownloadScript(transformationConfig, result as TransformationType).then((file) => {
+                          const fileBase =
+                          // Removes extension from filename
+                            typeof source !== "string" ? source.name.replace(/\.[^/.]+$/, "") : undefined;
                           if (typeof file === "string") {
                             if (result === "ratt") {
-                              downloadFile(file, "convert.ts", "text/x-typescript");
+                              downloadFile(file, `${fileBase ? fileBase + "." : ""}convert.ts`, "text/x-typescript");
                             } else if (result === "cow") {
                               const fileName =
-                                typeof source === "string" ? `convert.json` : `${source?.name}-metadata.json`;
+                                typeof source === "string"
+                                  ? `convert.csv-metadata.json`
+                                  : `${source?.name}-metadata.json`;
                               downloadFile(file, fileName, "application/json+ld");
                             } else if (result === "rml") {
-                              downloadFile(file, "rules.rml.ttl", "text/turtle");
+                              downloadFile(file, `${fileBase || "rules"}.rml.ttl`, "text/turtle");
                             }
                           }
                         })
