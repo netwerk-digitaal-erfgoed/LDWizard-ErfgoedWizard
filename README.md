@@ -5,8 +5,6 @@ from the cultural heritage domain.
 
 ## Prerequisites / Getting started
 
-## Prerequisites / Getting started
-
 1. Install [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
    On Ubuntu this is done with the following commands.  Check the project
