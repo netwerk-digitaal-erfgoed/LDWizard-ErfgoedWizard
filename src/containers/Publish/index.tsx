@@ -172,7 +172,7 @@ const Publish: React.FC<Props> = ({}) => {
                   </CardContent>
                   <CardActions>
                     <SplitButton
-                      actions={["ratt", "cow", "rml"]}
+                      actions={["rml","cow", "ratt"]}
                       getButtonlabel={(selectedOption) => `Download ${selectedOption}`}
                       getOptionsLabel={(option) => (option === "cow" ? "CoW" : option.toUpperCase())}
                       onActionSelected={(result) =>
