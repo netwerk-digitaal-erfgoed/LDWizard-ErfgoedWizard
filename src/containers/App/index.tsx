@@ -13,7 +13,7 @@ const App: React.FC<Props> = () => {
       <AppBar position="static" color="default">
         <Toolbar>
           <img src={NDEImg} className={styles.image} />
-          <Typography>LD-Wizard demo</Typography>
+          <Typography>ErfgoedWizard</Typography>
         </Toolbar>
       </AppBar>
       <Container component="main" className={styles.main}>

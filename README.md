@@ -3,11 +3,16 @@
 A wizard that makes it easy to create linked data from tabular data
 from the cultural heritage domain.
 
-## Prerequisites / Getting started
+## Details
+
+This is an implementation of the generic [LD Wizard
+Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
+
+## Getting started
 
 1. Install [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
-   On Ubuntu this is done with the following commands.  Check the project
+   On Ubuntu this is done with the following commands. Check the project
    websites for installation on other operating systems.
 
    ```sh
@@ -22,13 +27,16 @@ from the cultural heritage domain.
 
 3. Run `yarn` to install the dependencies.
 
-## Local use / development
+### Local use / development
 
-1. Run `yarn dev` to start the LD Wizard application.
+To start using a local instance for testing/development follow these steps
 
+1. Run `yarn dev` to start the ErfgoedWizard application.
 2. Go to <http://localhost:4000> in your favorite web browser.
 
-## Production Docker deployment
+## Docker deployment
+
+In order to test the deployed LD-Wizard version use the following steps. You can also use these steps to test the ErfgoedWizard without installing the other prerequisites (Except docker)
 
 1. Build the Docker image:
 
@@ -43,12 +51,3 @@ from the cultural heritage domain.
    ```
 
 3. Go to <http://localhost:4000> in your favorite web browser.
-
-## Releasing
-
-To mark a version as stable, run `yarn run util:markStable`.
-
-## Details
-
-This is an implementation of the generic [LD Wizard
-Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
