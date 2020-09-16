@@ -39,7 +39,7 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
                 object: namedNode("csvw:Dialect"),
               },
               {
-                predicate: namedNode("csvw:delemiter"),
+                 predicate: namedNode("csvw:delimiter"),
                 object: literal(configuration.csvProps.delimiter),
               },
               {
