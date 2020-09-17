@@ -95,7 +95,7 @@ const Publish: React.FC<Props> = ({}) => {
       <Container className={styles.publishOptions}>
         {wizardConfig.publishOrder.map((publishOption) => publishOptions[publishOption])}
         {Object.entries(publishOptions).map(([key, value]) => {
-          if (key in wizardConfig.publishOrder) return null;
+          if (wizardConfig.publishOrder.indexOf(key as PublishElement) >= 0) return null;
           return value;
         })}
       </Container>
