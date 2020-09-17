@@ -34,8 +34,8 @@ const TriplyDBUpload: React.FC<Props> = ({ transformationResult }) => {
     <ErrorBoundary resetAction={resetToken}>
       <Card variant="outlined">
         <CardHeader
-          title={<Typography variant="h5">{`Publish to ${apiInfo?.branding.name || "TriplyDB"}`}</Typography>}
-          avatar={apiInfo && <Avatar src={apiInfo.branding.logo} />}
+          title={<Typography variant="h5">{`Publish results to ${apiInfo?.branding.name || "TriplyDB"}`}</Typography>}
+          avatar={apiInfo && <Avatar src={apiInfo.branding.logo} variant="square"/>}
         />
         <CardContent>
           <ErrorBoundary>
