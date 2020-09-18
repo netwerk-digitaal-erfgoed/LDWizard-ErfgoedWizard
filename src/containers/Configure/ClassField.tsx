@@ -3,7 +3,7 @@ import * as React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { transformationConfigState, prefixState } from "state";
 
-import { getPrefixed } from "@triply/utils/lib/prefixUtils";
+import { getPrefixed, getPrefixInfoFromPrefixedValue } from "@triply/utils/lib/prefixUtils";
 
 import { Autocomplete } from "@material-ui/lab";
 import { Typography, TextField } from "@material-ui/core";
@@ -84,7 +84,14 @@ const ResourceClassField: React.FC<Props> = ({}) => {
             value={classValue}
             helperText={autocompleteError || getPrefixed(classValue, prefixes) || classValue || ""}
             error={!!autocompleteError}
-            onChange={(event) => setClassValue(event.currentTarget.value)}
+            onChange={(event) => {
+              const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
+              if (prefixInfo.prefixLabel) {
+                setClassValue(`${prefixInfo.iri}${prefixInfo.localName}`);
+              } else {
+                setClassValue(event.currentTarget.value);
+              }
+            }}
             label={"Resource class IRI"}
             fullWidth
             type="url"

@@ -17,7 +17,7 @@ import * as styles from "./style.scss";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { transformationConfigState, prefixState } from "state";
 import { Autocomplete } from "@material-ui/lab";
-import { getPrefixed } from "@triply/utils/lib/prefixUtils";
+import { getPrefixed, getPrefixInfoFromPrefixedValue } from "@triply/utils/lib/prefixUtils";
 import getClassName from "classnames";
 import HintWrapper from "components/HintWrapper";
 import { AutocompleteSuggestion, getAutocompleteResults } from "utils/autocomplete";
@@ -174,7 +174,14 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
                     type="url"
                     inputMode="url"
                     fullWidth
-                    onChange={(event) => setPropertyIri(event.currentTarget.value)}
+                    onChange={(event) => {
+                      const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
+                      if (prefixInfo.prefixLabel) {
+                        setPropertyIri(`${prefixInfo.iri}${prefixInfo.localName}`);
+                      } else {
+                        setPropertyIri(event.currentTarget.value);
+                      }
+                    }}
                   />
                 </HintWrapper>
               )}
