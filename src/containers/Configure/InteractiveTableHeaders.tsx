@@ -21,6 +21,7 @@ import { getPrefixed, getPrefixInfoFromPrefixedValue } from "@triply/utils/lib/p
 import getClassName from "classnames";
 import HintWrapper from "components/HintWrapper";
 import { AutocompleteSuggestion, getAutocompleteResults } from "utils/autocomplete";
+import { cleanCSVValue, getBasePredicateIri } from "utils/helpers";
 
 interface Props {}
 const TableHeaders: React.FC<Props> = ({}) => {
@@ -33,7 +34,9 @@ const TableHeaders: React.FC<Props> = ({}) => {
         <TableRow>
           {transformationConfig.columnConfiguration.map((columnConfig, idx) => {
             const propertyIRI = transformationConfig.columnConfiguration[idx].propertyIri;
-            const fullUri = propertyIRI ?? `${transformationConfig.baseIri}${columnConfig.columnName}`;
+            const fullUri =
+              propertyIRI ??
+              `${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(columnConfig.columnName)}`;
             const shortUri = propertyIRI !== undefined ? getPrefixed(propertyIRI, prefixes) || propertyIRI : "";
             const isKeyColumn = idx === transformationConfig.key;
             return (
@@ -44,7 +47,10 @@ const TableHeaders: React.FC<Props> = ({}) => {
                 onClick={isKeyColumn ? undefined : () => setSelectedHeader(idx)}
                 // Replace Default tableCell with ButtonBase to create ripple effects on click
                 component={(props) => (
-                  <Tooltip title={isKeyColumn ? "This column will be used to create identifiers" : fullUri}>
+                  <Tooltip
+                    PopperProps={{ className: styles.tooltip }}
+                    title={isKeyColumn ? "This column will be used to create identifiers" : fullUri}
+                  >
                     <ButtonBase {...props} component="th" />
                   </Tooltip>
                 )}
@@ -122,7 +128,7 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
     onClose();
   };
   return (
-    <Dialog open={selectedHeader !== undefined} onClose={onClose} fullWidth>
+    <Dialog open={selectedHeader !== undefined} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>
         Choose property (
         {selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader].columnName})
@@ -167,9 +173,9 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
                     label="property URI"
                     error={!!autocompleteError}
                     helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
-                    placeholder={
-                      transformationConfig.baseIri + transformationConfig.columnConfiguration[selectedHeader].columnName
-                    }
+                    placeholder={`${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
+                      transformationConfig.columnConfiguration[selectedHeader].columnName
+                    )}`}
                     InputLabelProps={{ shrink: true }}
                     type="url"
                     inputMode="url"
