@@ -1,5 +1,5 @@
 import { TransformationScript, TransformationConfiguration } from "Definitions";
-import { cleanHeaderName } from "utils/helpers";
+import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "utils/helpers";
 
 interface CowColumn {
   "@id"?: string;
@@ -32,8 +32,8 @@ async function getCowTransformationScript(configuration: TransformationConfigura
   const baseIri = configuration.baseIri.toString();
 
   const columns: CowColumn[] = [];
-  const keyColumn = `{${
-    configuration.key !== undefined ? configuration.columnConfiguration[configuration.key].columnName : "_row"
+  const keyColumn = `${getBaseIdentifierIri(baseIri)}{${
+    (configuration.key && configuration.columnConfiguration[configuration.key].columnName) ?? "_row"
   }}`;
   columns.push({
     virtual: true,
@@ -43,12 +43,15 @@ async function getCowTransformationScript(configuration: TransformationConfigura
   });
   for (const columnConfig of configuration.columnConfiguration) {
     if (columnConfig.columnName.length === 0) continue;
-    columns.push({
-      datatype: "string",
-      "@id": `${baseIri}column/${columnConfig.columnName}`,
-      name: columnConfig.columnName,
-      propertyUrl: columnConfig.propertyIri ?? `${baseIri}${cleanHeaderName(columnConfig.columnName)}`,
-    });
+    if (
+      columnConfig.columnName === (configuration.key && configuration.columnConfiguration[configuration.key].columnName)
+    ) continue
+      columns.push({
+        datatype: "string",
+        "@id": `${baseIri}column/${columnConfig.columnName}`,
+        name: columnConfig.columnName,
+        propertyUrl: columnConfig.propertyIri ?? `${getBasePredicateIri(baseIri)}${cleanCSVValue(columnConfig.columnName)}`,
+      });
   }
 
   const script: CowTransformation = {

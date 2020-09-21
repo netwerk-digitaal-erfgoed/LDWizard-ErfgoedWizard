@@ -1,6 +1,6 @@
 import { TransformationScript, TransformationConfiguration } from "Definitions";
 import { DataFactory, Writer } from "n3";
-import { cleanHeaderName } from "utils/helpers";
+import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "utils/helpers";
 const { namedNode, literal } = DataFactory;
 
 const rmlPrefixes: { [key: string]: string } = {
@@ -39,7 +39,7 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
                 object: namedNode("csvw:Dialect"),
               },
               {
-                 predicate: namedNode("csvw:delimiter"),
+                predicate: namedNode("csvw:delimiter"),
                 object: literal(configuration.csvProps.delimiter),
               },
               {
@@ -65,7 +65,7 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
   const subjectTuple = !!keyColumnName
     ? {
         predicate: namedNode("rr:template"),
-        object: literal(`${configuration.baseIri}{${keyColumnName}}`),
+        object: literal(`${getBaseIdentifierIri(configuration.baseIri.toString())}{${keyColumnName}}`),
       }
     : // RML doesn't support adding base-iri + row-numbers as an identifier, so we use b-nodes here
       { predicate: namedNode("rr:termType"), object: namedNode("rr:BlankNode") };
@@ -98,7 +98,9 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
         {
           predicate: namedNode("rr:predicate"),
           object: namedNode(
-            header.propertyIri ? header.propertyIri : `${baseIri}${cleanHeaderName(header.columnName)}`
+            header.propertyIri
+              ? header.propertyIri
+              : `${getBasePredicateIri(baseIri)}${cleanCSVValue(header.columnName)}`
           ),
         },
         {

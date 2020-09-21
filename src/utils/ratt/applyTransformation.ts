@@ -3,11 +3,12 @@ import fromArray from "@triply/ratt/lib/middlewares/reading/fromArray";
 import { Util, NamedNode } from "n3";
 import toNtriplesString from "./middlewares/toNtriplesString";
 import { ApplyTransformation } from "Definitions";
-import { cleanHeaderName } from "../helpers";
+import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "../helpers";
 
 const applyTransformation: ApplyTransformation = async (opts) => {
   if (opts.type === "ratt" && Array.isArray(opts.source)) {
-    const baseIri = Util.prefix(opts.config.baseIri);
+    const baseDefIri = Util.prefix(getBasePredicateIri(opts.config.baseIri.toString()));
+    const baseInstanceIri = Util.prefix(getBaseIdentifierIri(opts.config.baseIri.toString()));
     const app = new Ratt();
 
     const getColumnConfig = (colName: string) =>
@@ -17,19 +18,16 @@ const applyTransformation: ApplyTransformation = async (opts) => {
     app.use(fromArray(opts.source));
 
     let rowCount = 0;
-    const keyColumn = opts.config.key ?? -1;
+    const keyColumn = opts.config.key && opts.config.columnConfiguration[opts.config.key].columnName;
     app.use((ctx, next) => {
-      const subject = baseIri(
-        keyColumn >= 0
-          ? cleanHeaderName(ctx.record[opts.config.columnConfiguration[keyColumn].columnName].value)
-          : "" + rowCount
-      );
+      const subject = baseInstanceIri(!!keyColumn ? cleanCSVValue(ctx.record[keyColumn].value) : "" + rowCount);
 
       for (const col in ctx.record) {
+        if (col === keyColumn) continue;
         if (ctx.record[col] && ctx.record[col].value.length > 0) {
           const colConf = getColumnConfig(col);
           if (!colConf) continue;
-          const predicate = colConf.propertyIri ? new NamedNode(colConf.propertyIri) : baseIri(cleanHeaderName(col));
+          const predicate = colConf.propertyIri ? new NamedNode(colConf.propertyIri) : baseDefIri(cleanCSVValue(col));
           ctx.store.addQuad(subject, predicate, ctx.record[col]);
         }
       }
