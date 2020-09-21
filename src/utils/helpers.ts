@@ -9,13 +9,13 @@ export function cleanCSVValue(headerName: string) {
 }
 
 export function getBasePredicateIri(baseIri: string) {
-  if (baseIri[-1] === "#") {
+  if (baseIri.endsWith('#')) {
     return baseIri.slice(0, -1) + "/dev#";
   }
   return baseIri + "dev/";
 }
 export function getBaseIdentifierIri(baseIri: string) {
-  if (baseIri[-1] === "#") {
+  if (baseIri.endsWith("#")) {
     return baseIri.slice(0, -1) + "/id#";
   }
   return baseIri + "id/";
