@@ -106,7 +106,7 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
         {
           predicate: namedNode("rr:objectMap"),
           object: writer.blank([
-            header.propertyIri
+            header.iriPrefix !== undefined
               ? {
                   predicate: namedNode("rr:template"),
                   object: literal(`${header.iriPrefix}{${header.columnName}}`),

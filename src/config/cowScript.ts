@@ -47,7 +47,7 @@ async function getCowTransformationScript(configuration: TransformationConfigura
       columnConfig.columnName === (configuration.key && configuration.columnConfiguration[configuration.key].columnName)
     )
       continue;
-    if (columnConfig.iriPrefix) {
+    if (columnConfig.iriPrefix !== undefined) {
       columns.push({
         "@id": `${baseIri}column/${columnConfig.columnName}`,
         name: columnConfig.columnName,

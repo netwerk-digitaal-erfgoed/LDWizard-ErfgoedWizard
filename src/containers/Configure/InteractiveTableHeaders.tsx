@@ -89,9 +89,8 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
   const selectedColumn =
     (selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader]) || undefined;
   const [propertyIri, setPropertyIri] = React.useState(selectedColumn?.propertyIri || "");
-
-  const [applyIriTransformation, setApplyIriTransformation] = React.useState(!!selectedColumn?.iriPrefix);
-  const [iriPrefix, setIriPrefix] = React.useState(selectedColumn?.iriPrefix || wizardConfig.defaultBaseIri);
+  const [applyIriTransformation, setApplyIriTransformation] = React.useState(selectedColumn?.iriPrefix !== undefined);
+  const [iriPrefix, setIriPrefix] = React.useState(selectedColumn?.iriPrefix ?? wizardConfig.defaultBaseIri);
 
   // Async call for results effect
   React.useEffect(() => {
@@ -117,10 +116,7 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
       const columnConfiguration = [...state.columnConfiguration];
       // Objects in recoil arrays are read-only
       const processedPropertyIri = propertyIri.length > 0 ? propertyIri : undefined;
-      let processedIriPrefix = applyIriTransformation ? iriPrefix : undefined;
-
-      if (processedIriPrefix && !processedIriPrefix.endsWith("/") && !processedIriPrefix.endsWith("#"))
-        processedIriPrefix = processedIriPrefix + "/";
+      const processedIriPrefix = applyIriTransformation ? iriPrefix : undefined;
 
       columnConfiguration[selectedHeader] = {
         columnName: columnConfiguration[selectedHeader].columnName,
@@ -220,9 +216,9 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
               />
             </div>
             <div className={styles.columnConfigSection}>
-              <Typography variant="subtitle1">Property configuration</Typography>
+              <Typography variant="subtitle1">Value configuration</Typography>
               <HintWrapper
-                hint="When enabled, the prefix below will be added to the values"
+                hint="When enabled, values in this column will be transformed to IRIs"
                 className={styles.hintOverride}
               >
                 <FormControlLabel
@@ -232,19 +228,22 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
                       onChange={(_input, checked) => setApplyIriTransformation(checked)}
                     />
                   }
-                  label={<Typography variant="body2">Apply IRI prefix</Typography>}
+                  label={<Typography variant="body2">Convert to IRI</Typography>}
                 />
               </HintWrapper>
               {applyIriTransformation && (
                 <div className={styles.indent}>
-                  <TextField
-                    label="Prefix"
-                    value={iriPrefix || ""}
-                    onChange={(event) => {
-                      setIriPrefix(event.target.value);
-                    }}
-                    fullWidth
-                  />
+                  <HintWrapper hint="This prefix will be prepended to all values in this column.">
+                    <TextField
+                      label="Prefix"
+                      value={iriPrefix || ""}
+                      onChange={(event) => {
+                        setIriPrefix(event.target.value);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      fullWidth
+                    />
+                  </HintWrapper>
                 </div>
               )}
             </div>
