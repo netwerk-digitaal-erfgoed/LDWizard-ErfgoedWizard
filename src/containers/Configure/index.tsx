@@ -29,12 +29,22 @@ interface Props {}
 
 export const Step = 2;
 
+const useCanScroll = () => {
+  const [canScroll, setCanScroll] = React.useState(false);
+  React.useEffect(() => {
+    setCanScroll(document.body.scrollHeight !== document.body.offsetHeight);
+  }, []);
+  return canScroll;
+};
+
 const Configure: React.FC<Props> = ({}) => {
   const parsedCsv = useRecoilValue(matrixState);
   const history = useHistory();
+  const canScroll = useCanScroll();
   const confirmConfiguration = () => {
     history.push(`/${Step + 1}`);
   };
+
   if (!parsedCsv) {
     return <Redirect to="/1" />;
   }
@@ -56,6 +66,13 @@ const Configure: React.FC<Props> = ({}) => {
           </AccordionDetails>
         </Accordion>
       </Container>
+      {canScroll && (
+        <Container>
+          <a href="#navigationButtons">
+            <FontAwesomeIcon icon={["fas", "caret-down"]} /> Scroll to bottom
+          </a>
+        </Container>
+      )}
       <Paper variant="outlined" square className={styles.tableWrapper}>
         <TableContainer>
           <Table>
@@ -85,7 +102,7 @@ const Configure: React.FC<Props> = ({}) => {
           </Table>
         </TableContainer>
       </Paper>
-      <Box>
+      <Box id="navigationButtons">
         <Button className={styles.actionButtons} onClick={() => history.push(`/${Step - 1}`)}>
           Back
         </Button>
