@@ -10,7 +10,8 @@ import { Typography, TextField } from "@material-ui/core";
 import HintWrapper from "components/HintWrapper";
 
 import * as styles from "./style.scss";
-import { AutocompleteSuggestion, getAutocompleteResults } from "utils/autocomplete";
+import { AutocompleteSuggestion } from "Definitions";
+import { wizardConfig } from "config";
 
 interface Props {}
 
@@ -35,7 +36,7 @@ const ResourceClassField: React.FC<Props> = ({}) => {
     const asyncCall = async () => {
       setAutocompleteError(undefined);
       try {
-        const results = await getAutocompleteResults(classValue || "Resource", "class");
+        const results = await wizardConfig.getClassSuggestions(classValue || "Resource");
         setAutocompleteSuggestions(results);
       } catch (e) {
         console.error(e);
@@ -52,26 +53,37 @@ const ResourceClassField: React.FC<Props> = ({}) => {
       options={autocompleteSuggestions}
       className={styles.baseIriField}
       value={classValue}
-      renderOption={(option: AutocompleteSuggestion) => (
-        <div>
-          <Typography>{getPrefixed(option.iri, prefixes) || option.iri}</Typography>
-          {option.description && (
-            <Typography
-              dangerouslySetInnerHTML={{ __html: option.description }}
-              variant="caption"
-              className={styles.hint}
-            />
-          )}
-        </div>
-      )}
+      renderOption={(option: AutocompleteSuggestion) => {
+        let titleString: string;
+        let description: string | undefined;
+        if (typeof option === "string") {
+          titleString = option;
+        } else if ("iri" in option) {
+          titleString = option.iri;
+          description = option.description;
+        } else {
+          titleString = option.value;
+        }
+        return (
+          <div>
+            <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
+            {description && (
+              <Typography dangerouslySetInnerHTML={{ __html: description }} variant="caption" className={styles.hint} />
+            )}
+          </div>
+        );
+      }}
       getOptionLabel={(value: any) => (typeof value === "string" ? value : value.iri)}
-      onChange={(_event, newValue: string | AutocompleteSuggestion | null) => {
+      onChange={(_event, newValue: AutocompleteSuggestion | null) => {
         if (!newValue) return;
         if (typeof newValue === "string") {
-        } else {
+          setClassValue(newValue);
+        } else if ("iri" in newValue) {
           setClassValue(newValue.iri);
-          confirmClassUri();
+        } else {
+          setClassValue(newValue.value);
         }
+        confirmClassUri();
       }}
       disableClearable
       renderInput={(props) => (

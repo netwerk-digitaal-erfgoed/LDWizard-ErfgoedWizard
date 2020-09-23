@@ -20,7 +20,8 @@ import { Autocomplete } from "@material-ui/lab";
 import { getPrefixed, getPrefixInfoFromPrefixedValue } from "@triply/utils/lib/prefixUtils";
 import getClassName from "classnames";
 import HintWrapper from "components/HintWrapper";
-import { AutocompleteSuggestion, getAutocompleteResults } from "utils/autocomplete";
+import { AutocompleteSuggestion } from "Definitions";
+import { wizardConfig } from "config";
 import { cleanCSVValue, getBasePredicateIri } from "utils/helpers";
 
 interface Props {}
@@ -36,7 +37,9 @@ const TableHeaders: React.FC<Props> = ({}) => {
             const propertyIRI = transformationConfig.columnConfiguration[idx].propertyIri;
             const fullUri =
               propertyIRI ??
-              `${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(columnConfig.columnName)}`;
+              `${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
+                columnConfig.columnName
+              )}`;
             const shortUri = propertyIRI !== undefined ? getPrefixed(propertyIRI, prefixes) || propertyIRI : "";
             const isKeyColumn = idx === transformationConfig.key;
             return (
@@ -92,7 +95,7 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
     const getAutocompleteSuggestions = async () => {
       setAutocompleteError(undefined);
       try {
-        const results = await getAutocompleteResults(searchTerm, "predicate");
+        const results = await wizardConfig.getPropertySuggestions(searchTerm);
         setAutocompleteSuggestions(results);
       } catch (e) {
         console.error(e);
@@ -140,27 +143,43 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
               freeSolo
               options={autocompleteSuggestions}
               value={propertyIri}
-              renderOption={(option: AutocompleteSuggestion) => (
-                <div>
-                  <Typography>{getPrefixed(option.iri, prefixes) || option.iri}</Typography>
-                  {option.description && (
-                    <Typography
-                      dangerouslySetInnerHTML={{ __html: option.description }}
-                      variant="caption"
-                      className={styles.hint}
-                    />
-                  )}
-                </div>
-              )}
+              renderOption={(option: AutocompleteSuggestion) => {
+                let titleString: string;
+                let description: string | undefined;
+                if (typeof option === "string") {
+                  titleString = option;
+                } else if ("iri" in option) {
+                  titleString = option.iri;
+                  description = option.description;
+                } else {
+                  titleString = option.value;
+                }
+                return (
+                  <div>
+                    <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
+                    {description && (
+                      <Typography
+                        dangerouslySetInnerHTML={{
+                          __html: description,
+                        }}
+                        variant="caption"
+                        className={styles.hint}
+                      />
+                    )}
+                  </div>
+                );
+              }}
               getOptionLabel={(value: any) =>
                 typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
               }
-              onChange={(_event, newValue: string | AutocompleteSuggestion | null) => {
+              onChange={(_event, newValue: AutocompleteSuggestion | null) => {
                 if (!newValue) return;
                 if (typeof newValue === "string") {
                   setPropertyIri(newValue);
-                } else {
+                } else if ("iri" in newValue) {
                   setPropertyIri(newValue.iri);
+                } else {
+                  setPropertyIri(newValue.value);
                 }
               }}
               disableClearable

@@ -34,7 +34,7 @@ interface ShardResponse {
     hits: ShardHit[];
   };
 }
-export interface AutocompleteSuggestion {
+interface AutocompleteSuggestion {
   iri: string;
   description?: string;
 }
@@ -50,13 +50,13 @@ function getSuggestionFromBody(responseBody: ShardResponse): AutocompleteSuggest
 /**
  * Gets autocomplete results
  * @param searchTerm The term to search for
- * @param type Which type of autocompletions you want ("class" || "predicate")
+ * @param type Which type of autocompletions you want ("class" || "property")
  * @param [location] location of the autocomplete ElasticSearch endpoint
  * @returns autocomplete results
  */
-export async function getAutocompleteResults(
+async function getAutocompleteResults(
   searchTerm: string,
-  type: "class" | "predicate",
+  type: "class" | "property",
   location = AUTOCOMPLETE_LOCATION
 ): Promise<AutocompleteSuggestion[]> {
   const searchObject = {
@@ -96,4 +96,12 @@ export async function getAutocompleteResults(
   });
   const json: ShardResponse = await response.json();
   return getSuggestionFromBody(json);
+}
+
+export function getClassSuggestions(searchTerm: string) {
+  return getAutocompleteResults(searchTerm, "class");
+}
+
+export function getPropertySuggestions(searchTerm: string) {
+  return getAutocompleteResults(searchTerm, "property");
 }
