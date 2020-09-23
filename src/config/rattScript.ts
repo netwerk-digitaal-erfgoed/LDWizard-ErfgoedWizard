@@ -37,7 +37,10 @@ const applyTransformation: ApplyTransformation = async (opts) => {
           const colConf = getColumnConfig(col);
           if (!colConf) continue;
           const predicate = colConf.propertyIri ? new NamedNode(colConf.propertyIri) : baseDefIri(cleanCSVValue(col));
-          ctx.store.addQuad(subject, predicate, ctx.record[col]);
+          const object = colConf.iriPrefix
+            ? new NamedNode(`${colConf.iriPrefix}${cleanCSVValue(ctx.record[col].value)}`)
+            : ctx.record[col];
+          ctx.store.addQuad(subject, predicate, object);
         }
       }
       ctx.store.addQuad(

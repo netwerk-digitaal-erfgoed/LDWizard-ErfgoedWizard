@@ -11,6 +11,7 @@ export type AutocompleteSuggestion = string | Rdf.NamedNode | { iri: string; des
 export type ColumnConfiguration = {
   columnName: string;
   propertyIri?: string;
+  iriPrefix?: string;
 };
 export interface TransformationConfiguration {
   /** Base IRI */
@@ -90,6 +91,6 @@ export interface UploadTransformationI<P> {
   publishConfiguration: P;
 }
 /**
- * Upload the source data, transformation script, and transformation output to a public enviroment
+ * Upload the source data, transformation script, and transformation output to a public environment
  */
 export type UploadTransformation<P> = (opts: UploadTransformationI<P>) => Promise<void>;

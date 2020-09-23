@@ -12,6 +12,8 @@ import {
   Button,
   ButtonBase,
   TextField,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 import * as styles from "./style.scss";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -88,6 +90,9 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
     (selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader]) || undefined;
   const [propertyIri, setPropertyIri] = React.useState(selectedColumn?.propertyIri || "");
 
+  const [applyIriTransformation, setApplyIriTransformation] = React.useState(!!selectedColumn?.iriPrefix);
+  const [iriPrefix, setIriPrefix] = React.useState(selectedColumn?.iriPrefix || wizardConfig.defaultBaseIri);
+
   // Async call for results effect
   React.useEffect(() => {
     if (!selectedColumn) return;
@@ -111,17 +116,17 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
       if (selectedHeader === undefined) return state;
       const columnConfiguration = [...state.columnConfiguration];
       // Objects in recoil arrays are read-only
-      if (propertyIri.length === 0) {
-        columnConfiguration[selectedHeader] = {
-          columnName: columnConfiguration[selectedHeader].columnName,
-          propertyIri: undefined,
-        };
-      } else {
-        columnConfiguration[selectedHeader] = {
-          columnName: columnConfiguration[selectedHeader].columnName,
-          propertyIri: propertyIri,
-        };
-      }
+      const processedPropertyIri = propertyIri.length > 0 ? propertyIri : undefined;
+      let processedIriPrefix = applyIriTransformation ? iriPrefix : undefined;
+
+      if (processedIriPrefix && !processedIriPrefix.endsWith("/") && !processedIriPrefix.endsWith("#"))
+        processedIriPrefix = processedIriPrefix + "/";
+
+      columnConfiguration[selectedHeader] = {
+        columnName: columnConfiguration[selectedHeader].columnName,
+        propertyIri: processedPropertyIri,
+        iriPrefix: processedIriPrefix,
+      };
       return {
         ...state,
         columnConfiguration: columnConfiguration,
@@ -133,84 +138,116 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
   return (
     <Dialog open={selectedHeader !== undefined} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>
-        Choose property (
+        Column configuration (
         {selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader].columnName})
       </DialogTitle>
       <DialogContent>
         {selectedHeader !== undefined && (
           <form onSubmit={confirmIri}>
-            <Autocomplete
-              freeSolo
-              options={autocompleteSuggestions}
-              value={propertyIri}
-              renderOption={(option: AutocompleteSuggestion) => {
-                let titleString: string;
-                let description: string | undefined;
-                if (typeof option === "string") {
-                  titleString = option;
-                } else if ("iri" in option) {
-                  titleString = option.iri;
-                  description = option.description;
-                } else {
-                  titleString = option.value;
+            <div className={styles.columnConfigSection}>
+              <Typography variant="subtitle1">Property configuration</Typography>
+              <Autocomplete
+                freeSolo
+                options={autocompleteSuggestions}
+                value={propertyIri}
+                renderOption={(option: AutocompleteSuggestion) => {
+                  let titleString: string;
+                  let description: string | undefined;
+                  if (typeof option === "string") {
+                    titleString = option;
+                  } else if ("iri" in option) {
+                    titleString = option.iri;
+                    description = option.description;
+                  } else {
+                    titleString = option.value;
+                  }
+                  return (
+                    <div>
+                      <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
+                      {description && (
+                        <Typography
+                          dangerouslySetInnerHTML={{
+                            __html: description,
+                          }}
+                          variant="caption"
+                          className={styles.hint}
+                        />
+                      )}
+                    </div>
+                  );
+                }}
+                getOptionLabel={(value: any) =>
+                  typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
                 }
-                return (
-                  <div>
-                    <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
-                    {description && (
-                      <Typography
-                        dangerouslySetInnerHTML={{
-                          __html: description,
-                        }}
-                        variant="caption"
-                        className={styles.hint}
-                      />
-                    )}
-                  </div>
-                );
-              }}
-              getOptionLabel={(value: any) =>
-                typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
-              }
-              onChange={(_event, newValue: AutocompleteSuggestion | null) => {
-                if (!newValue) return;
-                if (typeof newValue === "string") {
-                  setPropertyIri(newValue);
-                } else if ("iri" in newValue) {
-                  setPropertyIri(newValue.iri);
-                } else {
-                  setPropertyIri(newValue.value);
-                }
-              }}
-              disableClearable
-              openOnFocus
-              renderInput={(props) => (
-                <HintWrapper hint="This IRI will define the relation between the key column and this column">
+                onChange={(_event, newValue: AutocompleteSuggestion | null) => {
+                  if (!newValue) return;
+                  if (typeof newValue === "string") {
+                    setPropertyIri(newValue);
+                  } else if ("iri" in newValue) {
+                    setPropertyIri(newValue.iri);
+                  } else {
+                    setPropertyIri(newValue.value);
+                  }
+                }}
+                disableClearable
+                openOnFocus
+                renderInput={(props) => (
+                  <HintWrapper hint="This IRI will define the relation between the key column and this column">
+                    <TextField
+                      {...props}
+                      autoFocus
+                      label="property URI"
+                      error={!!autocompleteError}
+                      helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
+                      placeholder={`${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
+                        transformationConfig.columnConfiguration[selectedHeader].columnName
+                      )}`}
+                      InputLabelProps={{ shrink: true }}
+                      type="url"
+                      inputMode="url"
+                      fullWidth
+                      onChange={(event) => {
+                        const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
+                        if (prefixInfo.prefixLabel) {
+                          setPropertyIri(`${prefixInfo.iri}${prefixInfo.localName}`);
+                        } else {
+                          setPropertyIri(event.currentTarget.value);
+                        }
+                      }}
+                    />
+                  </HintWrapper>
+                )}
+              />
+            </div>
+            <div className={styles.columnConfigSection}>
+              <Typography variant="subtitle1">Property configuration</Typography>
+              <HintWrapper
+                hint="When enabled, the prefix below will be added to the values"
+                className={styles.hintOverride}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={applyIriTransformation}
+                      onChange={(_input, checked) => setApplyIriTransformation(checked)}
+                    />
+                  }
+                  label={<Typography variant="body2">Apply IRI prefix</Typography>}
+                />
+              </HintWrapper>
+              {applyIriTransformation && (
+                <div className={styles.indent}>
                   <TextField
-                    {...props}
-                    autoFocus
-                    label="property URI"
-                    error={!!autocompleteError}
-                    helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
-                    placeholder={`${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
-                      transformationConfig.columnConfiguration[selectedHeader].columnName
-                    )}`}
-                    InputLabelProps={{ shrink: true }}
-                    type="url"
-                    inputMode="url"
-                    fullWidth
+                    label="Prefix"
+                    value={iriPrefix || ""}
                     onChange={(event) => {
-                      const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
-                      if (prefixInfo.prefixLabel) {
-                        setPropertyIri(`${prefixInfo.iri}${prefixInfo.localName}`);
-                      } else {
-                        setPropertyIri(event.currentTarget.value);
-                      }
+                      setIriPrefix(event.target.value);
                     }}
+                    fullWidth
                   />
-                </HintWrapper>
+                </div>
               )}
-            />
+            </div>
           </form>
         )}
       </DialogContent>

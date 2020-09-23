@@ -47,13 +47,23 @@ async function getCowTransformationScript(configuration: TransformationConfigura
       columnConfig.columnName === (configuration.key && configuration.columnConfiguration[configuration.key].columnName)
     )
       continue;
-    columns.push({
-      datatype: "string",
-      "@id": `${baseIri}column/${columnConfig.columnName}`,
-      name: columnConfig.columnName,
-      propertyUrl:
-        columnConfig.propertyIri ?? `${getBasePredicateIri(baseIri)}${cleanCSVValue(columnConfig.columnName)}`,
-    });
+    if (columnConfig.iriPrefix) {
+      columns.push({
+        "@id": `${baseIri}column/${columnConfig.columnName}`,
+        name: columnConfig.columnName,
+        propertyUrl:
+          columnConfig.propertyIri ?? `${getBasePredicateIri(baseIri)}${cleanCSVValue(columnConfig.columnName)}`,
+        valueUrl: `${columnConfig.iriPrefix}{${columnConfig.columnName}}`,
+      });
+    } else {
+      columns.push({
+        datatype: "string",
+        "@id": `${baseIri}column/${columnConfig.columnName}`,
+        name: columnConfig.columnName,
+        propertyUrl:
+          columnConfig.propertyIri ?? `${getBasePredicateIri(baseIri)}${cleanCSVValue(columnConfig.columnName)}`,
+      });
+    }
   }
 
   const script: CowTransformation = {

@@ -2,16 +2,17 @@ import * as React from "react";
 import { IconButton, Popover, Container, Typography, Box } from "@material-ui/core";
 import FontAwesomeIcon from "components/FontAwesomeIcon";
 import * as styles from "./style.scss";
-
+import getClassName from "classnames";
 interface Props {
   hint: string;
+  className?: string;
 }
 
-const HintWrapper: React.FC<Props> = ({ hint, children }) => {
+const HintWrapper: React.FC<Props> = ({ hint, className, children }) => {
   const [hintOpen, setHintOpen] = React.useState(false);
   const popOverRef = React.useRef<HTMLButtonElement>(null);
   return (
-    <Box className={styles.hintField}>
+    <Box className={getClassName(styles.hintField, className)}>
       {children}
       <IconButton
         className={styles.hintButton}
