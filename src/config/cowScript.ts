@@ -1,9 +1,6 @@
 import { TransformationScript, TransformationConfiguration } from "Definitions";
 import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "utils/helpers";
-/**
- * This file serves as the base template for a CoW transformation script
- * See `../../config/cowScript.ts` for the current transformation script
- */
+
 interface CowColumn {
   "@id"?: string;
   datatype?: string;
@@ -81,5 +78,5 @@ async function getCowTransformationScript(configuration: TransformationConfigura
   };
   return JSON.stringify(script, undefined, 2);
 }
-// Disabled export as this is a base template file
-// export default getCowTransformationScript;
+
+export default getCowTransformationScript;

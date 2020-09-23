@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./style.scss";
 import { Box, Container, Button } from "@material-ui/core";
 import { useHistory, Redirect } from "react-router-dom";
-import applyTransformation from "utils/ratt/applyTransformation";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { matrixState, sourceState, transformationConfigState } from "state";
 import TriplyDBUpload from "./TriplyDBPublishForm";
@@ -26,7 +25,7 @@ const Publish: React.FC<Props> = ({}) => {
       setTransformationResult(undefined);
       setTransformationError(undefined);
       if (parsedCsv) {
-        const transformationResult = await applyTransformation({
+        const transformationResult = await wizardConfig.applyTransformation({
           config: transformationConfig,
           source: parsedCsv,
           type: "ratt",
@@ -68,7 +67,7 @@ const Publish: React.FC<Props> = ({}) => {
     );
   }
   const publishOptions: { [P in PublishElement]: React.ReactElement } = {
-    download: <DownloadResults transformationResult={transformationResult}/>,
+    download: <DownloadResults transformationResult={transformationResult} />,
     triplyDB: (
       <ErrorBoundary
         resetAction={(errorText: string) => {

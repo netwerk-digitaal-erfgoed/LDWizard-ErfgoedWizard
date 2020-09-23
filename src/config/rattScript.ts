@@ -1,12 +1,18 @@
 import Ratt from "@triply/ratt";
 import fromArray from "@triply/ratt/lib/middlewares/reading/fromArray";
 import { Util, NamedNode } from "n3";
-import toNtriplesString from "./middlewares/toNtriplesString";
+import toNtriplesString from "utils/ratt/middlewares/toNtriplesString";
 import { ApplyTransformation } from "Definitions";
-import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "../helpers";
+import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "utils/helpers";
+
 /**
- * This file serves as the base template for a Ratt transformation script
- * See `../../config/rattScript.ts` for the current transformation script
+ * Different from the other transformation script, as it is also used in the wizard to transform the data. See `/src/utils/ratt/getTransformation.ts` to get the transformation script itself
+ * When making changes to this file make sure to copy the result to `/src/utils/ratt/applyTransformation.txt`
+ */
+
+/**
+ * Applies the transformation using RATT
+ * @param opts
  */
 const applyTransformation: ApplyTransformation = async (opts) => {
   if (opts.type === "ratt" && Array.isArray(opts.source)) {
@@ -50,5 +56,4 @@ const applyTransformation: ApplyTransformation = async (opts) => {
     throw new Error("Not supported");
   }
 };
-// Disabled export as this is a base template file
-// export default applyTransformation;
+export default applyTransformation;

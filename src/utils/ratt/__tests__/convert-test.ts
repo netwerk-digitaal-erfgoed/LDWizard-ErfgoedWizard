@@ -1,5 +1,5 @@
 import * as chai from "chai";
-import applyTransformation from "../applyTransformation";
+import applyTransformation from "config/rattScript";
 var expect = chai.expect;
 
 describe("Ratt - applyTransformation", function () {

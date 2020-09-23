@@ -3,12 +3,10 @@ import styles from "./style.scss";
 import { Container, Button, Card, CardActions, CardContent, CardHeader, Typography } from "@material-ui/core";
 import FontAwesomeIcon from "components/FontAwesomeIcon";
 import SplitButton from "components/SplitButton";
-import { TransformationType, GetTransformationScript } from "Definitions";
-import getRattTransformationScript from "utils/ratt/getTransformation";
-import getCowTransformationScript from "utils/cow/getTransformation";
-import getRmlTransformationScript from "utils/rml/getTransformation";
+import { TransformationType } from "Definitions";
 import { useRecoilValue } from "recoil";
 import { sourceState, transformationConfigState } from "state";
+import { wizardConfig } from "config";
 
 interface Props {
   transformationResult: string;
@@ -30,18 +28,6 @@ const DownloadResults: React.FC<Props> = ({ transformationResult }) => {
     }
     downloadRef.current.click();
   };
-  const getDownloadScript: GetTransformationScript = (configuration, type) => {
-    switch (type) {
-      case "ratt":
-        return getRattTransformationScript(configuration);
-      case "cow":
-        return getCowTransformationScript(configuration);
-      case "rml":
-        return getRmlTransformationScript(configuration);
-      default:
-        throw new Error("Unknown script selected");
-    }
-  };
   if (!source) return null;
   return (
     <Card variant="outlined">
@@ -52,10 +38,7 @@ const DownloadResults: React.FC<Props> = ({ transformationResult }) => {
       <CardContent className={styles.downloadContent}>
         <Container className={styles.downloadContainer}>
           <Card variant="outlined" className={styles.downloadSegment}>
-            <CardHeader
-              title="Download CSV"
-              avatar={<FontAwesomeIcon icon={["fas", "file-csv"]} />}
-            />
+            <CardHeader title="Download CSV" avatar={<FontAwesomeIcon icon={["fas", "file-csv"]} />} />
             <CardContent className={styles.downloadContent}>
               Download your tabular source data as standardized CSV.{" "}
             </CardContent>
@@ -99,22 +82,24 @@ const DownloadResults: React.FC<Props> = ({ transformationResult }) => {
                 getButtonlabel={(selectedOption) => `Download ${selectedOption}`}
                 getOptionsLabel={(option) => (option === "cow" ? "CoW" : option.toUpperCase())}
                 onActionSelected={(result) =>
-                  getDownloadScript(transformationConfig, result as TransformationType).then((file) => {
-                    const fileBase =
-                      // Removes extension from filename
-                      typeof source !== "string" ? source.name.replace(/\.[^/.]+$/, "") : undefined;
-                    if (typeof file === "string") {
-                      if (result === "ratt") {
-                        downloadFile(file, `${fileBase ? fileBase + "." : ""}convert.ts`, "text/x-typescript");
-                      } else if (result === "cow") {
-                        const fileName =
-                          typeof source === "string" ? `convert.csv-metadata.json` : `${source?.name}-metadata.json`;
-                        downloadFile(file, fileName, "application/json+ld");
-                      } else if (result === "rml") {
-                        downloadFile(file, `${fileBase || "rules"}.rml.ttl`, "text/turtle");
+                  wizardConfig
+                    .getTransformationScript(transformationConfig, result as TransformationType)
+                    .then((file) => {
+                      const fileBase =
+                        // Removes extension from filename
+                        typeof source !== "string" ? source.name.replace(/\.[^/.]+$/, "") : undefined;
+                      if (typeof file === "string") {
+                        if (result === "ratt") {
+                          downloadFile(file, `${fileBase ? fileBase + "." : ""}convert.ts`, "text/x-typescript");
+                        } else if (result === "cow") {
+                          const fileName =
+                            typeof source === "string" ? `convert.csv-metadata.json` : `${source?.name}-metadata.json`;
+                          downloadFile(file, fileName, "application/json+ld");
+                        } else if (result === "rml") {
+                          downloadFile(file, `${fileBase || "rules"}.rml.ttl`, "text/turtle");
+                        }
                       }
-                    }
-                  })
+                    })
                 }
               />
             </CardActions>

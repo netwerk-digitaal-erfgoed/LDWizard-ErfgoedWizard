@@ -2,10 +2,6 @@ import { TransformationScript, TransformationConfiguration } from "Definitions";
 import { DataFactory, Writer } from "n3";
 import { cleanCSVValue, getBaseIdentifierIri, getBasePredicateIri } from "utils/helpers";
 const { namedNode, literal } = DataFactory;
-/**
- * This file serves as the base template for a Rml transformation script
- * See `../../config/rmlScript.ts` for the current transformation script
- */
 
 const rmlPrefixes: { [key: string]: string } = {
   rml: "http://semweb.mmlab.be/ns/rml#",
@@ -121,5 +117,5 @@ async function getRmlTransformationScript(configuration: TransformationConfigura
     });
   });
 }
-// Disabled export as this is a base template file
-// export default getRmlTransformationScript;
+
+export default getRmlTransformationScript;
