@@ -1,10 +1,12 @@
-FROM node:12.18.3 as build
+FROM node:lts-alpine as build
+WORKDIR /app
+COPY package.json ./
+COPY yarn.lock ./
+RUN yarn
+COPY . .
+RUN yarn run build
 
-COPY . /ldwizard
-
-RUN cd /ldwizard && yarn && yarn run build
-
-
-FROM nginx:1.19.2
-
-COPY --from=build /ldwizard/lib /usr/share/nginx/html 
+FROM nginx:stable-alpine
+COPY --from=build /app/lib /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
