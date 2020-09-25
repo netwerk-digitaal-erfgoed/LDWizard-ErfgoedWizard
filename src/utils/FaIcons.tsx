@@ -12,13 +12,14 @@ import {
   faDatabase,
   faDownload,
   faExclamationTriangle,
+  faFileCsv,
   faInfo,
   faInfoCircle,
-  faFileCsv,
+  faLongArrowAltDown,
+  faPlus,
   faThumbsUp as faThumbsUpSolid,
   faTimes,
   faUpload,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -39,6 +40,7 @@ export default function registerIcons() {
     faFileArchive,
     faFileCode,
     faFileCsv,
+    faLongArrowAltDown,
     faPlus,
     faTimes,
     faThumbsUp,

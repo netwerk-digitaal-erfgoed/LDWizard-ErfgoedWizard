@@ -69,7 +69,7 @@ const Configure: React.FC<Props> = ({}) => {
       {canScroll && (
         <Container>
           <a href="#navigationButtons">
-            <FontAwesomeIcon icon={["fas", "caret-down"]} /> Scroll to bottom
+            <FontAwesomeIcon icon={["fas", "long-arrow-alt-down"]} /> Scroll to bottom
           </a>
         </Container>
       )}

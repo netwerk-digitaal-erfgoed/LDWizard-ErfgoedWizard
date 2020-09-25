@@ -133,131 +133,133 @@ const ColumnConfigDialog: React.FC<AutoCompleteProps> = ({ selectedHeader, onClo
   };
   return (
     <Dialog open={selectedHeader !== undefined} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>
-        Column configuration (
-        {selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader].columnName})
-      </DialogTitle>
-      <DialogContent>
-        {selectedHeader !== undefined && (
-          <form onSubmit={confirmIri}>
-            <div className={styles.columnConfigSection}>
-              <Typography variant="subtitle1">Property configuration</Typography>
-              <Autocomplete
-                freeSolo
-                options={autocompleteSuggestions}
-                value={propertyIri}
-                renderOption={(option: AutocompleteSuggestion) => {
-                  let titleString: string;
-                  let description: string | undefined;
-                  if (typeof option === "string") {
-                    titleString = option;
-                  } else if ("iri" in option) {
-                    titleString = option.iri;
-                    description = option.description;
-                  } else {
-                    titleString = option.value;
+      <form onSubmit={confirmIri}>
+        <DialogTitle>
+          Column configuration (
+          {selectedHeader !== undefined && transformationConfig.columnConfiguration[selectedHeader].columnName})
+        </DialogTitle>
+        <DialogContent>
+          {selectedHeader !== undefined && (
+            <>
+              <div className={styles.columnConfigSection}>
+                <Typography variant="subtitle1">Property configuration</Typography>
+                <Autocomplete
+                  freeSolo
+                  options={autocompleteSuggestions}
+                  value={propertyIri}
+                  renderOption={(option: AutocompleteSuggestion) => {
+                    let titleString: string;
+                    let description: string | undefined;
+                    if (typeof option === "string") {
+                      titleString = option;
+                    } else if ("iri" in option) {
+                      titleString = option.iri;
+                      description = option.description;
+                    } else {
+                      titleString = option.value;
+                    }
+                    return (
+                      <div>
+                        <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
+                        {description && (
+                          <Typography
+                            dangerouslySetInnerHTML={{
+                              __html: description,
+                            }}
+                            variant="caption"
+                            className={styles.hint}
+                          />
+                        )}
+                      </div>
+                    );
+                  }}
+                  getOptionLabel={(value: any) =>
+                    typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
                   }
-                  return (
-                    <div>
-                      <Typography>{getPrefixed(titleString, prefixes) || titleString}</Typography>
-                      {description && (
-                        <Typography
-                          dangerouslySetInnerHTML={{
-                            __html: description,
-                          }}
-                          variant="caption"
-                          className={styles.hint}
-                        />
-                      )}
-                    </div>
-                  );
-                }}
-                getOptionLabel={(value: any) =>
-                  typeof value === "string" ? value : getPrefixed(value.iri, prefixes) || value.iri
-                }
-                onChange={(_event, newValue: AutocompleteSuggestion | null) => {
-                  if (!newValue) return;
-                  if (typeof newValue === "string") {
-                    setPropertyIri(newValue);
-                  } else if ("iri" in newValue) {
-                    setPropertyIri(newValue.iri);
-                  } else {
-                    setPropertyIri(newValue.value);
-                  }
-                }}
-                disableClearable
-                openOnFocus
-                renderInput={(props) => (
-                  <HintWrapper hint="This IRI will define the relation between the key column and this column">
-                    <TextField
-                      {...props}
-                      autoFocus
-                      label="property URI"
-                      error={!!autocompleteError}
-                      helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
-                      placeholder={`${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
-                        transformationConfig.columnConfiguration[selectedHeader].columnName
-                      )}`}
-                      InputLabelProps={{ shrink: true }}
-                      type="url"
-                      inputMode="url"
-                      fullWidth
-                      onChange={(event) => {
-                        const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
-                        if (prefixInfo.prefixLabel) {
-                          setPropertyIri(`${prefixInfo.iri}${prefixInfo.localName}`);
-                        } else {
-                          setPropertyIri(event.currentTarget.value);
-                        }
-                      }}
-                    />
-                  </HintWrapper>
-                )}
-              />
-            </div>
-            <div className={styles.columnConfigSection}>
-              <Typography variant="subtitle1">Value configuration</Typography>
-              <HintWrapper
-                hint="When enabled, values in this column will be transformed to IRIs"
-                className={styles.hintOverride}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={applyIriTransformation}
-                      onChange={(_input, checked) => setApplyIriTransformation(checked)}
-                    />
-                  }
-                  label={<Typography variant="body2">Convert to IRI</Typography>}
+                  onChange={(_event, newValue: AutocompleteSuggestion | null) => {
+                    if (!newValue) return;
+                    if (typeof newValue === "string") {
+                      setPropertyIri(newValue);
+                    } else if ("iri" in newValue) {
+                      setPropertyIri(newValue.iri);
+                    } else {
+                      setPropertyIri(newValue.value);
+                    }
+                  }}
+                  disableClearable
+                  openOnFocus
+                  renderInput={(props) => (
+                    <HintWrapper hint="This IRI will define the relation between the key column and this column">
+                      <TextField
+                        {...props}
+                        autoFocus
+                        label="property URI"
+                        error={!!autocompleteError}
+                        helperText={autocompleteError || getPrefixed(propertyIri, prefixes)}
+                        placeholder={`${getBasePredicateIri(transformationConfig.baseIri.toString())}${cleanCSVValue(
+                          transformationConfig.columnConfiguration[selectedHeader].columnName
+                        )}`}
+                        InputLabelProps={{ shrink: true }}
+                        type="url"
+                        inputMode="url"
+                        fullWidth
+                        onChange={(event) => {
+                          const prefixInfo = getPrefixInfoFromPrefixedValue(event.currentTarget.value, prefixes);
+                          if (prefixInfo.prefixLabel) {
+                            setPropertyIri(`${prefixInfo.iri}${prefixInfo.localName}`);
+                          } else {
+                            setPropertyIri(event.currentTarget.value);
+                          }
+                        }}
+                      />
+                    </HintWrapper>
+                  )}
                 />
-              </HintWrapper>
-              {applyIriTransformation && (
-                <div className={styles.indent}>
-                  <HintWrapper hint="This prefix will be prepended to all values in this column.">
-                    <TextField
-                      label="Prefix"
-                      value={iriPrefix || ""}
-                      onChange={(event) => {
-                        setIriPrefix(event.target.value);
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      fullWidth
-                    />
-                  </HintWrapper>
-                </div>
-              )}
-            </div>
-          </form>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button className={styles.actionButtons} variant="contained" color="primary" onClick={confirmIri}>
-          Confirm
-        </Button>
-        <Button className={styles.actionButtons} onClick={onClose}>
-          Cancel
-        </Button>
-      </DialogActions>
+              </div>
+              <div className={styles.columnConfigSection}>
+                <Typography variant="subtitle1">Value configuration</Typography>
+                <HintWrapper
+                  hint="When enabled, values in this column will be transformed to IRIs"
+                  className={styles.hintOverride}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={applyIriTransformation}
+                        onChange={(_input, checked) => setApplyIriTransformation(checked)}
+                      />
+                    }
+                    label={<Typography variant="body2">Convert to IRI</Typography>}
+                  />
+                </HintWrapper>
+                {applyIriTransformation && (
+                  <div className={styles.indent}>
+                    <HintWrapper hint="This prefix will be prepended to all values in this column.">
+                      <TextField
+                        label="Prefix"
+                        value={iriPrefix || ""}
+                        onChange={(event) => {
+                          setIriPrefix(event.target.value);
+                        }}
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                      />
+                    </HintWrapper>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button className={styles.actionButtons} variant="contained" color="primary" type="submit">
+            Confirm
+          </Button>
+          <Button className={styles.actionButtons} onClick={onClose}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
