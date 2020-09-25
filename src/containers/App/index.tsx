@@ -22,13 +22,13 @@ const App: React.FC<Props> = () => {
       <Paper component="footer" className={styles.footer}>
         {/* Is reversed in CSS */}
         <nav className={styles.footerNav}>
-          <a href="https://github.com/netwerk-digitaal-erfgoed/LDWizard">
+          <a href="https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard">
             <FontAwesomeIcon icon="book" /> Documentation
           </a>
           <a href="https://data.netwerkdigitaalerfgoed.nl/">
             <FontAwesomeIcon icon="database" /> Dataplatform
           </a>
-          <a href="https://github.com/netwerk-digitaal-erfgoed/LDWizard">
+          <a href="https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard">
             <FontAwesomeIcon icon={["fab", "github"]} /> Github
           </a>
         </nav>
