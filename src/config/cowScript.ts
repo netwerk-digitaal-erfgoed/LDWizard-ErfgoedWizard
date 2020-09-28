@@ -33,7 +33,10 @@ async function getCowTransformationScript(configuration: TransformationConfigura
 
   const columns: CowColumn[] = [];
   const keyColumn = `${getBaseIdentifierIri(baseIri)}{${
-    (configuration.key && configuration.columnConfiguration[configuration.key].columnName) ?? "_row"
+    (configuration.key !== undefined &&
+      configuration.key >= 0 &&
+      configuration.columnConfiguration[configuration.key].columnName) ??
+    "_row"
   }}`;
   columns.push({
     virtual: true,

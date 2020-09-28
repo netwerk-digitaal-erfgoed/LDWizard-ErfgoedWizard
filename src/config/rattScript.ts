@@ -27,7 +27,10 @@ const applyTransformation: ApplyTransformation = async (opts) => {
     app.use(fromArray(opts.source));
 
     let rowCount = 0;
-    const keyColumn = opts.config.key && opts.config.columnConfiguration[opts.config.key].columnName;
+    const keyColumn =
+      opts.config.key !== undefined &&
+      opts.config.key >= 0 &&
+      opts.config.columnConfiguration[opts.config.key].columnName;
     app.use((ctx, next) => {
       const subject = baseInstanceIri(!!keyColumn ? cleanCSVValue(ctx.record[keyColumn].value) : "" + rowCount);
 
