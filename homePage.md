@@ -4,10 +4,8 @@ De [Kracht van Linked Data](https://www.youtube.com/watch?v=rJPhNTw7u4U) is dat 
 
 Voor erfgoeddata die in CSV-formaat beschikbaar is, kun je gebruik maken van de online LDWizard om deze te converteren naar Linked Data. De eerste stap daarbij is dat je het CSV-bestand in de applicatie upload. Vervolgens configureer je de manier waarop de erfgoeddata kan worden omgezet naar Linked Data. In deze configuratiestap leg je vast welke kolom (met een unieke waarde) een rij identificeert en wat er in het CSV-bestand is beschreven, bijvoorbeeld een persoon of een kunstwerk. Daarna bepaal je per kolom welke standaard-eigenschap ('property') van de persoon of kunstwerk het beste overeenkomt met de data in de kolom. In de derde stap kun je het resultaat in Linked Data formaat (Resource Description Framework, RDF) downloaden en bekijken. Maar je kunt het ook publiceren in een online Linked Data database om het daar te bekijken. (Voor dat laatste heb je wel toegang tot een Linked Data database nodig.) Ten slotte kun je er ook voor kiezen om een conversiescript te downloaden waarmee je jouw Linked Data transformatie verder kunt uitwerken in meer geavanceerde tools (RML, CoW of RATT).
 
-<figure>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VO61pqKWw7A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<figcaption>Een demonstratie van de werking van de LDWizard voor erfgoed</figcaption>
-</figure>
+<small>Een demonstratie van de werking van de LDWizard voor erfgoed</small>
 
 **[klik hier](./1)** om meteen van start te gaan.
 
