@@ -5,5 +5,8 @@ services:
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
+      args: 
+        CONFIG_FILE: ./config.ts
+
     ports:
       - "4000:80" 

@@ -5,7 +5,7 @@ from the cultural heritage domain.
 
 ## Details
 
-This is an implementation of the generic [LD Wizard
+This is a configuration of the generic [LD Wizard
 Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
 
 ## Getting started
@@ -27,12 +27,14 @@ Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
 
 3. Run `yarn` to install the dependencies.
 
+4. Run `yarn build` to create the build locally
+
 ### Local use / development
 
 To start using a local instance for testing/development follow these steps
 
-1. Run `yarn dev` to start the ErfgoedWizard application.
-2. Go to <http://localhost:4000> in your favorite web browser.
+1. Run `yarn build` to generate the ErfgoedWizard application.
+2. Host the lib folder statically
 
 ## Docker deployment
 
