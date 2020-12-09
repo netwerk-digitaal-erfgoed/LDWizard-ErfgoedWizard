@@ -1,6 +1,6 @@
 # LD Wizard: Erfgoed Wizard
 
-A GUI application that makes it easy to create linked data from tabular data
+An [online GUI application](https://ldwizard.netwerkdigitaalerfgoed.nl) that makes it easy to create linked data from tabular data
 from the cultural heritage domain.
 
 This application uses [LD Wizard](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
