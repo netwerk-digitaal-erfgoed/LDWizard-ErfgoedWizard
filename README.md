@@ -1,14 +1,17 @@
-# LDWizard ErfgoedWizard
+# LD Wizard: Erfgoed Wizard
 
-A wizard that makes it easy to create linked data from tabular data
+A GUI application that makes it easy to create linked data from tabular data
 from the cultural heritage domain.
 
-## Details
+This application uses [LD Wizard](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
 
-This is a configuration of the generic [LD Wizard
-Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
+## 1. Usage
 
-## Getting started
+You can use this application online over at: https://ldwizard.netwerkdigitaalerfgoed.nl
+
+## 2. Build locally
+
+Follow these steps to build the application locally:
 
 1. Install [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
@@ -29,27 +32,29 @@ Interface](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
 
 4. Run `yarn build` to create the build locally
 
-### Local use / development
+5. Start an HTTP server in the `lib/` subdirectory.  For example:
 
-To start using a local instance for testing/development follow these steps
+   ```sh
+   cd lib
+   http-server .
+   ```
 
-1. Run `yarn build` to generate the ErfgoedWizard application.
-2. Host the lib folder statically
+6. Visit <http://localhost:4000> in a web browser.
 
-## Docker deployment
+## 3. Create a Docker container
 
-In order to test the deployed LD-Wizard version use the following steps. You can also use these steps to test the ErfgoedWizard without installing the other prerequisites (Except docker)
+Follow these steps to build a Docker container for this application.  This is an alternative for building the application locally, which does not require installing Node.js and Yarn prerequisites.  The alternative does require Docker as a prerequisite.
 
 1. Build the Docker image:
 
-   ```bash
+   ```sh
    docker-compose -f ./docker/docker-compose.yml build
    ```
 
 2. Start the service:
 
-   ```bash
+   ```sh
    docker-compose -f ./docker/docker-compose.yml up
    ```
 
-3. Go to <http://localhost:4000> in your favorite web browser.
+3. Visit <http://localhost:4000> in a web browser.
