@@ -7,7 +7,7 @@ Voor erfgoeddata die in CSV-formaat beschikbaar is, kun je gebruik maken van de 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VO61pqKWw7A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <small>Een demonstratie van de werking van de LDWizard voor erfgoed</small>
 
-**[klik hier](./1)** om meteen van start te gaan.
+**[klik hier](./#1)** om meteen van start te gaan.
 
 ## Achtergrond
 

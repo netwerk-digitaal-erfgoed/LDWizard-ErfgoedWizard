@@ -1,7 +1,9 @@
 import WizardConfig, { PrefixEntry } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
+import TermennetwerkTransformation from "./termenNetwerkTransformation";
 const img = require("./ndelogo.png").default;
 const favIcon = require("./logo.png").default;
 const homePage = require("./homePage.md");
+
 const wizardConfig: WizardConfig = {
   appName: "Erfgoed Wizard",
   defaultBaseIri: "https://data.netwerkdigitaalerfgoed.nl/",
@@ -20,5 +22,6 @@ const wizardConfig: WizardConfig = {
       return prefixes;
     }
   },
+  columnRefinements: [TermennetwerkTransformation],
 };
 export default wizardConfig;
