@@ -2,11 +2,11 @@
   "name": "ld-wizard-nde",
   "version": "1.0.0",
   "main": "./src/index.ts",
-  "author": "Gerwin Bosch <gerwin.bosch@triply.cc.com>",
+  "author": "Triply <info@triply.cc>",
   "private": true,
   "license": "TBD",
   "scripts": {
-    "build": "yarn exec ldwizard-build ./config.ts"
+    "build": "ldwizard-build ./config.ts"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard#readme",
   "dependencies": {
-    "@netwerkdigitaalerfgoed/ldwizard": "^1.0.7",
+    "@netwerkdigitaalerfgoed/ldwizard": "^1.0.11",
     "graphql": "^15.4.0",
     "graphql-request": "^3.4.0"
   }
