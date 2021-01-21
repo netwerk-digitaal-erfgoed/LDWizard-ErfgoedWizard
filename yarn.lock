@@ -961,10 +961,10 @@
     prop-types "^15.7.2"
     react-is "^16.8.0 || ^17.0.0"
 
-"@netwerkdigitaalerfgoed/ldwizard@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@netwerkdigitaalerfgoed/ldwizard/-/ldwizard-1.0.11.tgz#771d690fcc6dd53881d43e0cbcef6ba0c1923de7"
-  integrity sha512-59y6e9/Fnh6oJFF15P+fzZRRK7pouGEnkMLUM4bIt0zUTjXVlv+Taft8JQbJXdpTQ/0sChZz0YpoU8J/JeBhWw==
+"@netwerkdigitaalerfgoed/ldwizard@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@netwerkdigitaalerfgoed/ldwizard/-/ldwizard-1.0.12.tgz#a1fca13f9996b306e27db4ab3c747ebb05d45cd4"
+  integrity sha512-zsJ2d/g/aIv6TMWdlLVOnreecW6/lOLCUF+R4oS/jL1dOIDnHF9vqoW2n3lUAGu0rbs4hL8vuiYQoru7THG5ug==
   dependencies:
     "@babel/core" "^7.11.1"
     "@babel/plugin-transform-runtime" "^7.11.0"
