@@ -46,6 +46,7 @@ const transformation: ColumnRefinement = {
   description:
     "Deze transformatie gebruikt het Termennetwerk om waardes in de kolom te vervangen met identificatie codes van deze termen. Zie https://termennetwerk.netwerkdigitaalerfgoed.nl/faq#ontwikkelaars voor meer informatie",
   transformation: async (searchTerm) => {
+    if (searchTerm === "") return undefined;
     if (cache[searchTerm.toLowerCase()]) return cache[searchTerm.toLowerCase()];
     const result: GraphQlResponse = await client.request(graphQlQuery, { query: searchTerm });
     const firstResult = result.terms.find((source) => source.result.terms.length > 0)?.result.terms[0]?.uri;
