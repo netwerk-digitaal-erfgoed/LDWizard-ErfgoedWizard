@@ -1,5 +1,5 @@
 import WizardConfig, { PrefixEntry } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
-import TermennetwerkTransformationAAT from "./termenNetwerkTransformationAAT";
+import TermennetwerkTransformationAAT from "./termennetwerkTransformationAAT";
 import TermennetwerkTransformationCHT from "./termennetwerkTransformationCHT";
 const img = require("./ndelogo.png").default;
 // const favIcon = require("./logo.png").default;
