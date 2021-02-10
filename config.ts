@@ -1,7 +1,8 @@
 import WizardConfig, { PrefixEntry } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
-import TermennetwerkTransformation from "./termenNetwerkTransformation";
+import TermennetwerkTransformationAAT from "./termenNetwerkTransformationAAT";
+import TermennetwerkTransformationCHT from "./termennetwerkTransformationCHT";
 const img = require("./ndelogo.png").default;
-const favIcon = require("./logo.png").default;
+// const favIcon = require("./logo.png").default;
 const homePage = require("./homePage.md");
 
 const wizardConfig: WizardConfig = {
@@ -12,7 +13,7 @@ const wizardConfig: WizardConfig = {
   homepageMarkdown: homePage,
   publishOrder: ["download"],
   icon: img,
-  favIcon: favIcon,
+  //favIcon: favIcon,
   dataplatformLink: "https://data.netwerkdigitaalerfgoed.nl/",
   repositoryLink: "https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard",
   getAllowedPrefixes: async () => {
@@ -22,6 +23,6 @@ const wizardConfig: WizardConfig = {
       return prefixes;
     }
   },
-  columnRefinements: [TermennetwerkTransformation],
+  columnRefinements: [TermennetwerkTransformationAAT, TermennetwerkTransformationCHT],
 };
 export default wizardConfig;
