@@ -6,7 +6,7 @@ const img = require("./ndelogo.png").default;
 const homePage = require("./homePage.md");
 
 const wizardConfig: WizardConfig = {
-  appName: "Erfgoed Wizard",
+  appName: "LDWizard - Erfgoed",
   defaultBaseIri: "https://data.netwerkdigitaalerfgoed.nl/",
   primaryColor: "#0a3dfa",
   secondaryColor: "#172a59",
