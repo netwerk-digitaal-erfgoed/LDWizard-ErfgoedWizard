@@ -51,9 +51,8 @@ export async function getUriOfSearchTerm(sources: string[], searchTerm: string):
     const cacheKey = searchTerm.toLowerCase();
     if (cache[cacheKey]) return cache[cacheKey];
     const response: GraphQlResponse = await client.request(graphQlQuery, { sources, query: searchTerm });
-
     if (!Array.isArray(response.terms) ||
-        response.terms.length !== 1 ||
+        response.terms[0].result.terms.length !== 1 ||
         !response.terms[0].result ||
         !response.terms[0].result.terms ||
         !Array.isArray(response.terms[0].result.terms)) {

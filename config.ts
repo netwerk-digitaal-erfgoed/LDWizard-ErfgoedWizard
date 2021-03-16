@@ -1,6 +1,8 @@
 import WizardConfig, { PrefixEntry } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
 import TermennetwerkTransformationAAT from "./termennetwerkTransformationAAT";
 import TermennetwerkTransformationCHT from "./termennetwerkTransformationCHT";
+import TermennetwerkTransformationWDPersons from "./termennetwerkTransformationWDPersons";
+import TermennetwerkTransformationWDPlaces from "./termennetwerkTransformationWDPlaces";
 const img = require("./ndelogo.png").default;
 // const favIcon = require("./logo.png").default;
 const homePage = require("./homePage.md");
@@ -23,6 +25,11 @@ const wizardConfig: WizardConfig = {
       return prefixes;
     }
   },
-  columnRefinements: [TermennetwerkTransformationAAT, TermennetwerkTransformationCHT],
+  columnRefinements: [TermennetwerkTransformationAAT,
+                      TermennetwerkTransformationCHT,
+                      TermennetwerkTransformationWDPersons,
+                      TermennetwerkTransformationWDPlaces
+                      ]
+                      
 };
 export default wizardConfig;
