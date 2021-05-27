@@ -24,12 +24,14 @@ const wizardConfig: WizardConfig = {
       const prefixes: PrefixEntry[] = await response.json();
       return prefixes;
     }
+    console.error("Prefixes retrieval failed")
+    return [];
   },
-  columnRefinements: [TermennetwerkTransformationAAT,
-                      TermennetwerkTransformationCHT,
-                      TermennetwerkTransformationWDPersons,
-                      TermennetwerkTransformationWDPlaces
-                      ]
-                      
+  columnRefinements: [
+    TermennetwerkTransformationAAT,
+    TermennetwerkTransformationCHT,
+    TermennetwerkTransformationWDPersons,
+    TermennetwerkTransformationWDPlaces,
+  ],
 };
 export default wizardConfig;
