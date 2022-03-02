@@ -13,6 +13,7 @@ interface GraphQlResponse {
         prefLabel: string[];
         altLabel: string[];
       }[];
+      message: string;
     };
   }[];
 }
@@ -21,6 +22,7 @@ const graphQlQuery = gql`
     terms(
       sources: $sources
       query: $query
+      queryMode: OPTIMIZED
     ) {
       source {
         name
@@ -51,22 +53,20 @@ export async function getUriOfSearchTerm(sources: string[], searchTerm: string):
     const cacheKey = searchTerm.toLowerCase();
     if (cache[cacheKey]) return cache[cacheKey];
     const response: GraphQlResponse = await client.request(graphQlQuery, { sources, query: searchTerm });
-    if (!Array.isArray(response.terms) ||
-        response.terms[0].result.terms.length !== 1 ||
-        !response.terms[0].result ||
-        !response.terms[0].result.terms ||
-        !Array.isArray(response.terms[0].result.terms)) {
+    const result = response.terms[0].result;
+    if (!Array.isArray(result.terms) ||   // terms[] does not exists when an error occurs like a timeout
+        result.terms.length !== 1 ) {     // allow only a single result
+          if (result.message) {
+            console.error(`Error message from Network-of-Terms API: "${result.message}" for keyword: "${searchTerm}"`);
+          }
           return undefined;
     }
-
-    /*
-      searchTerm 'fietsen (transportmiddelen)' => http://vocab.getty.edu/aat/300212636 (prefLabel)
-      searchTerm 'rijwiel' => http://vocab.getty.edu/aat/300212636 (altLabel)
-      searchTerm 'rijwielen' => http://vocab.getty.edu/aat/300212636 (altLabel)
-      searchTerm 'fiets' => undefined (no match with prefLabel or altLabel)
-    */
-    const term = response.terms[0].result.terms.find((term) => term.prefLabel.includes(searchTerm) || term.altLabel.includes(searchTerm));
-    if (term === undefined) return undefined;
+    const term = response.terms[0].result.terms[0];
+    const containsSearchTerm = (label: string) => label.toLowerCase() === searchTerm.toLowerCase();
+    const inPrefLabel = term.prefLabel.some(containsSearchTerm);
+    const inAltLabel = term.altLabel.some(containsSearchTerm);
+    if (!inPrefLabel && !inAltLabel ) return undefined;
+    
     cache[cacheKey] = term.uri;
     return term.uri;
 }
