@@ -61,14 +61,7 @@ export async function getUriOfSearchTerm(sources: string[], searchTerm: string):
           }
           return undefined;
     }
-    /*
-      searchTerm 'fietsen (transportmiddelen)' => http://vocab.getty.edu/aat/300212636 (prefLabel)
-      searchTerm 'rijwiel' => http://vocab.getty.edu/aat/300212636 (altLabel)
-      searchTerm 'rijwielen' => http://vocab.getty.edu/aat/300212636 (altLabel)
-      searchTerm 'fiets' => undefined (no match with prefLabel or altLabel)
-    */
     const term = response.terms[0].result.terms[0];
-
     const containsSearchTerm = (label: string) => label.toLowerCase() === searchTerm.toLowerCase();
     const inPrefLabel = term.prefLabel.some(containsSearchTerm);
     const inAltLabel = term.altLabel.some(containsSearchTerm);
