@@ -8,6 +8,7 @@ interface GraphQlResponse {
       name: string;
     };
     result: {
+      __typename: string;
       terms: {
         uri: string;
         prefLabel: string[];
@@ -54,18 +55,18 @@ export async function getUriOfSearchTerm(sources: string[], searchTerm: string):
     if (cache[cacheKey]) return cache[cacheKey];
     const response: GraphQlResponse = await client.request(graphQlQuery, { sources, query: searchTerm });
     const result = response.terms[0].result;
-    if (!Array.isArray(result.terms) ||   // terms[] does not exists when an error occurs like a timeout
-        result.terms.length !== 1 ) {     // allow only a single result
-          if (result.message) {
-            console.error(`Error message from Network-of-Terms API: "${result.message}" for keyword: "${searchTerm}"`);
-          }
-          return undefined;
+//    if (!Array.isArray(result.terms) ||   
+    if (result.__typename === 'TimeoutError') { // catch timeouts errors
+      console.error(`Timeout error from Network-of-Terms API: "${result.message}" for keyword: "${searchTerm}"`);
+      return undefined; 
     }
+    if (result.terms.length !== 1 ) return undefined; // allow only a single result
+          
     const term = response.terms[0].result.terms[0];
     const containsSearchTerm = (label: string) => label.toLowerCase() === searchTerm.toLowerCase();
-    const inPrefLabel = term.prefLabel.some(containsSearchTerm);
-    const inAltLabel = term.altLabel.some(containsSearchTerm);
-    if (!inPrefLabel && !inAltLabel ) return undefined;
+    const inPrefLabel = term.prefLabel.some(containsSearchTerm); // exact match for prefLabel?
+    const inAltLabel = term.altLabel.some(containsSearchTerm);   // exact match for altLabel?
+    if (!inPrefLabel && !inAltLabel ) return undefined; // no matches found
     
     cache[cacheKey] = term.uri;
     return term.uri;

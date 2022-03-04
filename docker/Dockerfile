@@ -1,5 +1,5 @@
 FROM node:12-alpine as build
-RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python
+RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python3
 RUN npm install --quiet node-gyp -g
 WORKDIR /app
 COPY package.json ./
