@@ -38,8 +38,9 @@ Follow these steps to build the application locally:
    cd lib
    http-server .
    ```
+6. Run `npm install -g http-server` if http-server is not yet available on your system
 
-6. Visit <http://localhost:4000> in a web browser.
+7. Visit <http://127.0.0.1:8081> in a web browser.
 
 ## 3. Create a Docker container
 
