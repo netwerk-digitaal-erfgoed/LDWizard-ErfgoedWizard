@@ -1,4 +1,4 @@
-import WizardConfig, { PrefixEntry } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
+import WizardConfig, { PrefixEntry } from "@pldn/ldwizard/types/WizardConfig";
 import TermennetwerkTransformationAAT from "./termennetwerkTransformationAAT";
 import TermennetwerkTransformationCHT from "./termennetwerkTransformationCHT";
 import TermennetwerkTransformationWDPersons from "./termennetwerkTransformationWDPersons";

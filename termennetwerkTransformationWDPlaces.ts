@@ -1,4 +1,4 @@
-import { ColumnRefinement } from "@netwerkdigitaalerfgoed/ldwizard/types/WizardConfig";
+import { ColumnRefinement } from "@pldn/ldwizard/types/WizardConfig";
 import { getUriOfSearchTerm } from "./termennetwerk";
 
 const transformation: ColumnRefinement = {
