@@ -49,7 +49,7 @@ const cache: { [query: string]: string } = {};
 
 const client = new GraphQLClient(endpoint);
 
-export async function getUriOfSearchTerm(sources: string[], searchTerm: string): Promise<string> {
+export async function getUriOfSearchTerm(sources: string[], searchTerm: string): Promise<string | undefined> {
     if (searchTerm === "") return undefined;
     const cacheKey = searchTerm.toLowerCase();
     if (cache[cacheKey]) return cache[cacheKey];

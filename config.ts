@@ -3,9 +3,15 @@ import TermennetwerkTransformationAAT from "./termennetwerkTransformationAAT";
 import TermennetwerkTransformationCHT from "./termennetwerkTransformationCHT";
 import TermennetwerkTransformationWDPersons from "./termennetwerkTransformationWDPersons";
 import TermennetwerkTransformationWDPlaces from "./termennetwerkTransformationWDPlaces";
-const img = require("./ndelogo.png").default;
-// const favIcon = require("./logo.png").default;
-const homePage = require("./homePage.md");
+
+// @ts-ignore
+import img from "./ndelogo.png";
+
+// @ts-ignore
+import favIcon from "./favicon.png";
+
+// @ts-ignore
+import homePage from "./homePage.md";
 
 const wizardConfig: WizardConfig = {
   appName: "LDWizard - Erfgoed",
@@ -15,7 +21,7 @@ const wizardConfig: WizardConfig = {
   homepageMarkdown: homePage,
   publishOrder: ["download"],
   icon: img,
-  //favIcon: favIcon,
+  favIcon: favIcon,
   dataplatformLink: "https://data.netwerkdigitaalerfgoed.nl/",
   repositoryLink: "https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard",
   getAllowedPrefixes: async () => {
@@ -34,4 +40,4 @@ const wizardConfig: WizardConfig = {
     TermennetwerkTransformationWDPlaces,
   ],
 };
-export default wizardConfig;
+globalThis.wizardConfig = wizardConfig;
