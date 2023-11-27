@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/netwerk-digitaal-erfgoed/LDWizard-ErfgoedWizard#readme",
   "dependencies": {
-    "@pldn/ldwizard": "^2.3.4",
+    "@pldn/ldwizard": "^3.0.7",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0"
   }
