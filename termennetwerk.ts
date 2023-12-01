@@ -75,12 +75,12 @@ const client = new GraphQLClient(endpoint);
 function selectTerm(result: Result, searchTerm: string, source: string): Term | undefined {
 
     if (result.__typename === 'ServerError') { // catch server errors
-      //console.log("Termennetwerk refinement: server error for source",source);
+      console.log("Termennetwerk refinement: server error for source",source);
       return undefined; 
     }
 
     if (result.__typename === 'TimeoutError') { // catch timeouts errors
-      //console.log("Termennetwerk refinement: time out for source", source);
+      console.log("Termennetwerk refinement: time out for source", source);
       return undefined; 
     }
 
