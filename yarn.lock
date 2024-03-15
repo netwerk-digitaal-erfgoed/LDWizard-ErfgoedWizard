@@ -117,10 +117,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.20.1.tgz#77583b6ea54cee7c1410ebbd54051b6a3fcbd8ba"
   integrity sha512-0MBh53o6XtI6ctDnRMeQ+xoCN8kD2qI1rY1KgF/xdWQwoFeKou7puvDfV8/Wv4Ctx2rRpET/gGdz3YlNtNACSA==
 
-"@pldn/ldwizard@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@pldn/ldwizard/-/ldwizard-4.0.0.tgz#b6ef12f3c427194e362b52b66f792fba54a39823"
-  integrity sha512-sI3FwRhYdod6fTMhAx/yLPt+YyMcH4TaRvmdcfX3Oeb9tjYYstjDpodeH/3x0tRO+chAQVXGvk38DjKUDgAjIw==
+"@pldn/ldwizard@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@pldn/ldwizard/-/ldwizard-4.0.1.tgz#05909a84fd7ae7e7bbf902d9f22d7c1a0456f910"
+  integrity sha512-GDPK/5QH2Vzqw40B055SduGqvHTVv8qdvXpkSvb7567sWZIMTddiLaD2Z5v6Yjzk96I95wjwdvsf9Kz5+8siRQ==
   dependencies:
     commander "^12.0.0"
     esbuild "^0.20.1"
