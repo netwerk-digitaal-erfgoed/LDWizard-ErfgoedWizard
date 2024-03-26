@@ -4,15 +4,17 @@ RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python3 git
 WORKDIR /app
 
 COPY package.json ./
-COPY package-lock.json ./
-RUN npm ci
+COPY yarn.lock ./
+COPY .yarn ./app/
+COPY .yarnrc ./app/
+RUN yarn
 
 COPY . .
-RUN npm run build --omit=dev
+RUN yarn build
 
 ARG CONFIG_FILE
-
-RUN npm exec ldwizard-build ${CONFIG_FILE}
+# RUN yarn add "@pldn/ldwizard"
+RUN yarn ldwizard-build ${CONFIG_FILE}
 
 
 FROM nginx:stable-alpine
