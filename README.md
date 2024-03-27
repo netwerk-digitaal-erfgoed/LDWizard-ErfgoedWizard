@@ -3,7 +3,7 @@
 An [online GUI application](https://ldwizard.netwerkdigitaalerfgoed.nl) that makes it easy to create linked data from tabular data
 from the cultural heritage domain.
 
-This application uses [LD Wizard](https://github.com/netwerk-digitaal-erfgoed/LDWizard).
+This application uses [LD Wizard](https://github.com/pldn/LDWizard).
 
 ## 1. Usage
 
